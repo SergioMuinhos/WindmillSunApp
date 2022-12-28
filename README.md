@@ -1,4 +1,4 @@
-# Proyecto fin de ciclo WindMill Sun
+# Proyecto WindMill Sun
 
 > # <img src="doc/img/windmill.png" width="80" height="80"> WindMill Sun . 
 >
