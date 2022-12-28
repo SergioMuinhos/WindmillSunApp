@@ -59,7 +59,7 @@
 
 ## Licencia
 
->  [`LICENSE`](LICENSE.md) *GNU Free Documentation License Version 1.3*
+>  [`LICENSE`](LICENSE.md) *GNU General Public License v3.0*
 >
 
 
