@@ -1,0 +1,23 @@
+package com.bolsadeideas.springboot.backend.apirest.models.entity;
+
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+
+@Entity
+public class ChangePassword  implements Serializable{
+	
+
+
+	private String oldPassword;
+	
+	private String newPassword;
+	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6281697014105601301L;
+	
+
+}

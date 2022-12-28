@@ -1,0 +1,89 @@
+package com.bolsadeideas.springboot.backend.apirest.controllers;
+
+import java.io.IOException;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.bolsadeideas.springboot.backend.apirest.models.entity.Factura;
+import com.bolsadeideas.springboot.backend.apirest.models.entity.Producto;
+import com.bolsadeideas.springboot.backend.apirest.models.services.IClienteService;
+import com.bolsadeideas.springboot.backend.apirest.utils.FacturaPDFExporter;
+import com.lowagie.text.DocumentException;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+
+@CrossOrigin(origins = { "http://localhost:4200" ,"*"})
+@RestController
+@RequestMapping("/api")
+@SecurityRequirement(name = "javainuseapi")
+public class FacturaRestContoller {
+	
+	@Autowired
+	private IClienteService clienteService;
+	
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@GetMapping("/facturas/{id}")
+	@ResponseStatus(code=HttpStatus.OK)
+	public Factura show(@PathVariable Long id) {
+		return clienteService.findFacturaById(id);
+	}
+	
+	@Secured({"ROLE_ADMIN"})
+	@DeleteMapping("/facturas/{id}")
+	@ResponseStatus(code=HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable Long id) {
+		clienteService.delete(id);
+	}
+	
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@GetMapping("/facturas/filter/{term}")
+	@ResponseStatus(code=HttpStatus.OK)
+	public List<Producto> filtrarProductos(@PathVariable String term){
+		
+		return clienteService.findProductoByName(term);
+	}
+	
+	
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@PostMapping("/facturas")
+	@ResponseStatus(code=HttpStatus.CREATED)
+	public Factura crear(@RequestBody Factura factura) {
+		return clienteService.saveFactura(factura);
+	}
+	//@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@GetMapping("/facturas/{id}/export")
+	public void exportToPDF(@PathVariable Long id,HttpServletResponse response) throws DocumentException, IOException {
+		response.setContentType("application/pdf");
+		
+		DateFormat dateFormatter= new SimpleDateFormat("dd-MM-yyyy");
+		String currentDate= dateFormatter.format(new Date());
+		
+		String headerkey="Content-Disposition";
+		String headerValue="attachment; filename=factura_"+id+"_"+currentDate+".pdf";
+		response.setHeader(headerkey,headerValue);
+		Factura f= clienteService.findFacturaById(id);
+		
+		FacturaPDFExporter exp=new FacturaPDFExporter(f);
+		exp.export(response);
+		
+	}
+}

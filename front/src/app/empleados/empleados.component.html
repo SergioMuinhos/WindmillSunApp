@@ -1,0 +1,44 @@
+<div class="container pt-5">
+  <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-rounded btn-primary" type="button" name="button" [routerLink]="['/empleados/form']"> 
+    Crear usuario
+  </button>
+  <div class="card border-primary mb-3 my-4 "style="min-width: 733px;">
+    <div class="card-header">Usuarios</div>
+    <div class="card-body text-primary card-block" > 
+          <div class="alert alert-info" *ngIf="usuarios?.length==0">
+            No hay registros de Usuarios en la Base de Datos .
+          </div>
+
+          <table class="table table-bordered table-responsive" *ngIf="usuarios?.length>0">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th *ngIf="authService.hasRole('ROLE_ADMIN')">Eliminar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of usuarios">
+                
+                <td  style="cursor: pointer;" (click)="abrirModal(user)"> <a> <span>{{user.id}}</span> </a></td>
+                <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+                    <a> <span>{{user.username}}</span> </a>
+                </td>
+                <td> {{user.nombre}}</td>
+                <td> {{user.apellidos | uppercase}}</td>
+                <td> {{user.email}}</td>
+                <td > <span *ngFor="let rol of user.roles"> {{rol.nombre}} </span> </td>
+                <td *ngIf="authService.hasRole('ROLE_ADMIN')"><button class="btn btn-danger btn-sm" type="button" name="button" (click)='delete(user)'> Eliminar</button></td>
+              
+              </tr>
+            </tbody>
+          </table>
+          <paginador-user *ngIf="paginador" [paginador]="paginador"></paginador-user>
+
+    </div>
+</div>
+</div>

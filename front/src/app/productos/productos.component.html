@@ -1,0 +1,33 @@
+<!--button type="button" (click)="setHabilitar()"  name="button" class="btn btn-primary my-3"> {{habilitar ? 'Ocultar' : 'Mostar'}}</button><br-->
+<div class="container pt-2">
+<button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" (click)="abrirModal()" name="button" class="btn btn-primary my-3"> Crear producto</button>
+<div class="card">
+  <div class="card-header">
+    Listado de Productos
+  </div>
+
+  <div class="table-responsive-sm">
+    <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Precio</th>
+        <th *ngIf="authService.hasRole('ROLE_ADMIN')" scope="col">Eliminar</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productos">
+          <th scope="row">{{producto.id}}</th>
+          <td>{{producto.nombre}} </td>
+          <td>{{producto.precio}} €</td>
+          <td *ngIf="authService.hasRole('ROLE_ADMIN')"><button class="btn btn-danger btn-sm" type="button" name="button" (click)='delete(producto)'>Eliminar </button></td>
+        </tr>
+      </tbody>
+    </table>
+    <paginador-prod  *ngIf="paginador" [paginador]="paginador"></paginador-prod>
+
+  </div>
+</div>
+<form-productos></form-productos>
+</div>

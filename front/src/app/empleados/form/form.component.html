@@ -1,0 +1,92 @@
+<div class="container pt-5">
+<ul class="alert alert-danger" *ngIf="errores?.['length']>0">
+    <li *ngFor="let err of errores">
+      {{err}}
+    </li>
+  </ul>
+  <div class="card bg-dark text-white my-4">
+    <div class="card-header"> Crear Usuario
+    </div>
+    <div class="card-body">
+      <form #usuarioForm="ngForm">
+        <div class="form-group row mb-3">
+          <label for="" class="col-form-label col-sm-2">Username:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" [(ngModel)]="usuario.username" name="username" #username="ngModel" required><!-- required -->
+            <div class="alert alert-danger" *ngIf="username.invalid && (username.dirty || username.touched)">
+              <div *ngIf="username.errors?.['required']" class="">
+                Username es Requerido
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row mb-3">
+          <label for="" class="col-form-label col-sm-2"> Nombre: </label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" [(ngModel)]="usuario.nombre" name="nombre" #nombre="ngModel" required> <!-- required minlenght="4"-->
+            <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+              <div *ngIf="nombre.errors?.['required']" class="">
+                Nombre es Requerido
+              </div>
+              <div *ngIf="nombre.errors?.['minlenght']">
+                Nombre debe tener al menos 4 caracteres
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-3">
+          <label for="" class="col-form-label col-sm-2">Apellidos:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" [(ngModel)]="usuario.apellidos" name="apellidos" #apellido="ngModel" required><!-- required -->
+            <div class="alert alert-danger" *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
+              <div *ngIf="apellido.errors?.['required']" class="">
+                Apellido es Requerido
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-3">
+          <label for="" class="col-form-label col-sm-2">Email:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" [(ngModel)]="usuario.email" name="email" #email="ngModel" required>
+            <!--email required -->
+            <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
+              <div *ngIf="email.errors?.['required']">
+                Email es Requerido
+              </div>
+              <div *ngIf="email.errors?.['email']">
+                Email debe tener un formato valido none@none.com
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-3">
+          <label for="" class="col-form-label col-sm-2">Rol:</label>
+          <div class="col-sm-6">
+            <select class="form-control" [(ngModel)]="usuario.roles" name="rol" style=" width:500px" #rol="ngModel" required>
+              <option value="" [ngValue]="undefined">--- Seleccionar Rol ---</option>
+              <option *ngFor="let rol of roles" [ngValue]="rol">{{rol.nombre}}</option>
+            </select>
+            <div class="alert alert-danger" *ngIf="rol.invalid && (rol.dirty || rol.touched)">
+              <div *ngIf="rol.errors?.['required']" class="">
+                Rol es Requerido
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-3">
+          <div class="col-sm-6">
+            <button class="btn btn-primary" type="submit" name="button" (click)='create()'  [disabled]="!usuarioForm.form.valid"> Crear</button>
+          </div>
+          
+        </div>
+  
+      </form>
+    </div>
+  </div>
+</div>
